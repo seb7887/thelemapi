@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+  - 'lts/*'
+cache:
+  directories:
+    - ~/.npm
+    - ~/.cache
+notifications:
+  email: false
+install: echo "Installing..."
+jobs:
+  include:
+    - stage: test
+      script: npm install && npm run test
+      on:
+        branch: develop
+    - stage: deploy
+      script: echo "Deploying..."
+      on:
+        branch: master
+stages:
+  - name: test
+    if: (branch = develop)
+  - name: deploy
+    if: (branch = master)
