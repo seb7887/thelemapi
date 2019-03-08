@@ -16,7 +16,7 @@ app.use(
         logger.info(message);
       },
     },
-  }),
+  })
 );
 
 app.use(bodyParser.json());
