@@ -40,6 +40,12 @@ passport.use(
   'jwt',
   new JWTStrategy(jwtOpts, (token, done) => {
     try {
+      const user = db.users.list().find(user => user.id === token._id);
+
+      if (!user) {
+        return done(true);
+      }
+
       return done(null, token._id);
     } catch (err) {
       return done(err);

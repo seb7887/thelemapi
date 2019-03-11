@@ -18,6 +18,6 @@ exports.login = (req, res) => {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365,
     });
-    return res.status(200).json({ id: user.id });
+    return res.status(200).json({ email: user.email });
   })(req, res);
 };
