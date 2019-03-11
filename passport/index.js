@@ -1,16 +1,19 @@
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
+const JWTStrategy = require('passport-jwt').Strategy;
+const ExtractJWT = require('passport-jwt').ExtractJwt;
 const db = require('../db');
+const config = require('../config');
 
 // Local Strategy
-const opts = {
+const localOpts = {
   usernameField: 'email',
   passwordField: 'password',
 };
 
 passport.use(
   'login',
-  new localStrategy(opts, (email, password, done) => {
+  new localStrategy(localOpts, (email, password, done) => {
     const user = db.users.list().find(user => user.email === email);
 
     if (!user) {
@@ -24,6 +27,23 @@ passport.use(
     }
 
     return done(null, user);
+  })
+);
+
+// JWT Strategy
+const jwtOpts = {
+  secretOrKey: config.jwtSecret,
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+};
+
+passport.use(
+  'jwt',
+  new JWTStrategy(jwtOpts, (token, done) => {
+    try {
+      return done(null, token._id);
+    } catch (err) {
+      return done(err);
+    }
   })
 );
 

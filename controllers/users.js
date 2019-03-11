@@ -11,3 +11,12 @@ exports.register = (req, res, next) => {
     return res.status(400).send();
   }
 };
+
+exports.getUsers = (req, res) => {
+  try {
+    const users = db.users.list();
+    return res.status(200).json({ users });
+  } catch (err) {
+    return res.status(400).send();
+  }
+};
