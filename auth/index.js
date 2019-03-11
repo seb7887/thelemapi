@@ -1,40 +1,23 @@
 const config = require('../config');
 const passport = require('passport');
-const localStrategy = require('passport-local').Strategy;
-const JWTStrategy = require('passport-jwt');
-const { ExtractJwt } = JWTStrategy;
+const JWTStrategy = require('passport-jwt').Strategy;
+const { ExtractJwt } = require('passport-jwt').ExtractJwt;
 
-passport.use(
-  'signup',
-  new localStrategy(
-    {
-      usernameField: 'email',
-      passwordField: 'password',
-    },
-    async (email, password, done) => {
-      try {
-        // save in db
-        return done(null, false);
-      } catch (err) {
-        done(err);
-      }
-    }
-  )
-);
+module.exports = () => {
+  let opts;
+  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+  opts.secretOrKey = config.jwtSecret;
 
-passport.use(
-  new JWTStrategy(
-    {
-      secretOrKey: config.jwtSecret,
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    },
-    async (token, done) => {
-      try {
-        // search user
-        return done(null, token);
-      } catch (err) {
-        done(err);
+  passport.use('jwt', new JWTStrategy(opts,
+      async (payload, done) => {
+        try {
+          console.log(payload);
+          // search user
+          return done(null, payload);
+        } catch (err) {
+          done(err);
+        }
       }
-    }
-  )
-);
+    )
+  );
+};

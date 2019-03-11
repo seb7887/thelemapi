@@ -8,6 +8,7 @@ const app = express();
 
 const logger = require('./logger');
 const routes = require('./routes');
+const auth = require('./auth');
 
 app.use(
   morgan('combined', {
@@ -23,6 +24,8 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(helmet());
 app.use(compression());
+
+app.use(auth);
 
 app.use('/', routes);
 
