@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const ExpressBrute = require('express-brute');
 
 // Controllers
 const authController = require('../controllers/auth');
@@ -8,6 +9,10 @@ const userController = require('../controllers/users');
 
 // Middleware
 const validate = require('../middleware/validate');
+
+// Brute Force Protection
+const store = new ExpressBrute.MemoryStore();
+const bruteforce = new ExpressBrute(store);
 
 // Public Routes
 router.get('/', (req, res) => {
@@ -21,7 +26,7 @@ router.post(
   userController.register,
   authController.login
 );
-router.post('/auth/login', authController.login);
+router.post('/auth/login', bruteforce.prevent, authController.login);
 
 // Protected Routes
 router.get(
