@@ -5,6 +5,30 @@ const request = require('supertest');
 const app = require('../app');
 const db = require('../db');
 
+const fakeUser = {
+  email: faker.internet.email(),
+  password: faker.internet.password(),
+};
+
+const registerUser = async user => {
+  const response = await request(app)
+    .post('/auth/register')
+    .send({
+      email: user.email,
+      password: user.password,
+    })
+    .expect(200);
+
+  const cookie = response.headers['set-cookie'][0]
+    .split(';')
+    .map(item => item.split(';')[0])
+    .join(';');
+
+  expect(response.body.email).toBe(user.email);
+
+  return cookie;
+};
+
 describe('User Routes', () => {
   beforeEach(() => {
     db.users.list().forEach(user => db.users.delete(user.id));
@@ -14,22 +38,42 @@ describe('User Routes', () => {
     db.users.list().forEach(user => db.users.delete(user.id));
   });
 
-  describe('/register', () => {
+  describe('/auth/register', () => {
     it('should register a new user', async () => {
-      let fakeUser = {
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-      };
+      const cookie = await registerUser(fakeUser);
+
+      expect(cookie).toContain('token');
+    });
+  });
+
+  describe('/users', () => {
+    it('should get all users if token is provided', async () => {
+      const cookie = await registerUser(fakeUser);
+      const token = cookie.split(';')[0].split('=')[1];
 
       const response = await request(app)
-        .post('/auth/register')
-        .send({
-          email: fakeUser.email,
-          password: fakeUser.password,
-        })
+        .get('/users')
+        .set('Authorization', `Bearer ${token}`)
         .expect(200);
 
-      expect(response.body.email).toBe(fakeUser.email);
+      expect(response.body.users).toHaveLength(1);
+    });
+
+    it('should not get all users if token is not provided', async () => {
+      const response = await request(app)
+        .get('/users')
+        .expect(401);
+
+      expect(response.text).toContain('Unauthorized');
+    });
+
+    it('should not get all users if token not correspond to any user', async () => {
+      const response = await request(app)
+        .get('/users')
+        .set('Authorization', `Bearer ${faker.random.uuid()}`)
+        .expect(401);
+
+      expect(response.text).toContain('Unauthorized');
     });
   });
 });
