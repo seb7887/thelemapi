@@ -9,15 +9,21 @@ const app = express();
 const logger = require('./logger');
 const routes = require('./routes');
 
-app.use(
-  morgan('combined', {
-    stream: {
-      write: message => {
-        logger.info(message);
+const dev = process.env.NODE_ENV !== 'production';
+
+require('./passport');
+
+if (!dev) {
+  app.use(
+    morgan('combined', {
+      stream: {
+        write: message => {
+          logger.info(message);
+        },
       },
-    },
-  }),
-);
+    })
+  );
+}
 
 app.use(bodyParser.json());
 app.use(cors());

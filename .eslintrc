@@ -1,16 +1,20 @@
 {
-  "plugins": [
-    "security"
+  "plugins": ["security"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:node/recommended",
+    "plugin:security/recommended"
   ],
-  "extends": ["eslint:recommended", "plugin:node/recommended", "plugin:security/recommended"],
   "rules": {
     "node/no-deprecated-api": ["error", "always"],
     "node/prefer-global/console": ["error", "always"],
+    "node/no-unpublished-require": "off",
     "no-console": "off",
-    "dot-location": ["error", "object"],
-    "no-else-return": ["error", "always"],
+    "dot-location": "off",
+    "no-else-return": "error",
     "global-require": "error",
     "brace-style": "error",
     "no-trailing-spaces": "error",
     "no-unneeded-ternary": "warn"
+  }
 }

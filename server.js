@@ -1,8 +1,9 @@
 const http = require('http');
 const app = require('./app');
+const config = require('./config');
 
 const server = http.createServer(app);
 
-server.listen(7000, () => {
-  console.log(`Server listening on port`);
+server.listen(config.port, () => {
+  console.log(`Server listening on port ${config.port}`);
 });
