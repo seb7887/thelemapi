@@ -24,7 +24,7 @@ const registerUser = async user => {
     .map(item => item.split(';')[0])
     .join(';');
 
-  expect(response.body.email).toBe(user.email);
+  expect(response.body.email).toBe(user.email.toLowerCase());
 
   return cookie;
 };
@@ -43,6 +43,20 @@ describe('User Routes', () => {
       const cookie = await registerUser(fakeUser);
 
       expect(cookie).toContain('token');
+    });
+
+    it('should not register a new user if inputs are not validated', async () => {
+      const response = await request(app)
+        .post('/auth/register')
+        .send({
+          email: faker.internet.email(),
+          password: '123',
+        })
+        .expect(400);
+
+      expect(response.text).toContain(
+        'Password must be between 4 and 22 characters'
+      );
     });
   });
 

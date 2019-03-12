@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+const validator = require('express-validator');
 const app = express();
 
 const logger = require('./logger');
@@ -26,6 +27,7 @@ if (!dev) {
 }
 
 app.use(bodyParser.json());
+app.use(validator());
 app.use(cors());
 app.use(helmet());
 app.use(compression());

@@ -6,13 +6,21 @@ const passport = require('passport');
 const authController = require('../controllers/auth');
 const userController = require('../controllers/users');
 
+// Middleware
+const validate = require('../middleware/validate');
+
 // Public Routes
 router.get('/', (req, res) => {
   res.json('Do what thou wilt');
 });
 
 // Auth Routes
-router.post('/auth/register', userController.register, authController.login);
+router.post(
+  '/auth/register',
+  validate.validateRegister,
+  userController.register,
+  authController.login
+);
 router.post('/auth/login', authController.login);
 
 // Protected Routes
