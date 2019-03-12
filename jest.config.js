@@ -7,6 +7,7 @@ module.exports = {
   collectCoverageFrom: [
     '**/controllers/**',
     '**/routes/**',
+    '**/middleware/**',
     '**/passport/**',
     './app.js',
     '!**/data/**',
