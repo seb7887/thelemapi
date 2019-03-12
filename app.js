@@ -7,6 +7,7 @@ const compression = require('compression');
 const validator = require('express-validator');
 const app = express();
 
+const errorHandler = require('./error');
 const logger = require('./logger');
 const routes = require('./routes');
 
@@ -33,5 +34,15 @@ app.use(helmet());
 app.use(compression());
 
 app.use('/', routes);
+
+// Error Handling
+app.use((req, res, next) => {
+  console.log(req);
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use(errorHandler);
 
 module.exports = app;

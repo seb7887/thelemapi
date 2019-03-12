@@ -7,15 +7,16 @@ exports.register = (req, res, next) => {
     db.users.create({ email, password });
     next();
   } catch (err) {
-    return res.status(400).send();
+    return next(err.message);
   }
 };
 
-exports.getUsers = (req, res) => {
+exports.getUsers = (req, res, next) => {
   try {
     const users = db.users.list();
     return res.status(200).json({ users });
   } catch (err) {
-    return res.status(400).send();
+    console.log(err);
+    return next(err.message);
   }
 };

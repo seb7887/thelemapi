@@ -7,10 +7,10 @@ const generateAuthToken = user => {
   return token;
 };
 
-exports.login = (req, res) => {
+exports.login = (req, res, next) => {
   passport.authenticate('login', (err, user, info) => {
     if (err || !user) {
-      return res.status(400).json(info);
+      return next({ status: 400, message: info.message });
     }
 
     const token = generateAuthToken(user);
