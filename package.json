@@ -9,8 +9,8 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon server.js",
     "start": "NODE_ENV=production node server.js",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest coverage",
+    "test:watch": "jest --runInBand",
+    "test:coverage": "jest --coverage",
     "test": "is-ci \"test:coverage\" \"test:watch\"",
     "format": "prettier \"**/*.+(js|json|less|css|ts|tsx|md)\" --write",
     "check-updates": "ncu",

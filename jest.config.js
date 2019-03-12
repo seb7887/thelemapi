@@ -6,9 +6,13 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.js', '**/test/**/*.js'],
   collectCoverageFrom: [
     '**/controllers/**',
+    '**/routes/**',
+    '**/passport/**',
+    './app.js',
     '!**/data/**',
     '!**/node_modules/**',
     '!**/__tests__/**',
+    '!**/coverage/**',
   ],
   watchPlugins: [
     'jest-watch-typeahead/filename',
