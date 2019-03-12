@@ -43,11 +43,12 @@ passport.use(
       const user = db.users.list().find(user => user.id === token._id);
 
       if (!user) {
-        return done(true);
+        throw new Error('This token not belongs to an existent user');
       }
 
       return done(null, token._id);
     } catch (err) {
+      console.log(err.message);
       return done(err);
     }
   })

@@ -49,7 +49,7 @@ describe('Auth Routes', () => {
       })
       .expect(400);
 
-    expect(response.body.message).toBe('Wrong Password');
+    expect(response.body.error.message).toBe('Wrong Password');
   });
 
   it('should display an error if user is not found', async () => {
@@ -61,6 +61,6 @@ describe('Auth Routes', () => {
       })
       .expect(400);
 
-    expect(response.body.message).toBe('Unexistent User');
+    expect(response.body.error.message).toBe('Unexistent User');
   });
 });

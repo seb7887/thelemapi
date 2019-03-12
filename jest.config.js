@@ -8,6 +8,7 @@ module.exports = {
     '**/controllers/**',
     '**/routes/**',
     '**/middleware/**',
+    '**/error/**',
     '**/passport/**',
     './app.js',
     '!**/data/**',

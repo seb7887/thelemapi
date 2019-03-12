@@ -20,7 +20,7 @@ exports.validateRegister = (req, res, next) => {
   const errors = req.validationErrors();
   if (errors) {
     const firstError = errors.map(error => error.msg)[0];
-    return res.status(400).json(firstError);
+    return next({ status: 400, message: firstError });
   }
 
   // Everything is OK

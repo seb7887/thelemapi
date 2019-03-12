@@ -54,7 +54,7 @@ describe('User Routes', () => {
         })
         .expect(400);
 
-      expect(response.text).toContain(
+      expect(response.body.error.message).toContain(
         'Password must be between 4 and 22 characters'
       );
     });
